@@ -50,7 +50,7 @@ impl Phoenixd {
     /// # Example
     /// ```
     /// use phoenixd_rs::Phoenixd;
-    /// let client = Phoenixd::new("xxxxxxxxxxx", "xxxxxxxx").unwrap();
+    /// let client = Phoenixd::new("xxxxxxxxxxx", "https://test.com", None).unwrap();
     /// ```
     pub fn new(api_password: &str, api_url: &str, webhook_url: Option<String>) -> Result<Self> {
         let client = reqwest::Client::builder().build()?;

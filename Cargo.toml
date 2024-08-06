@@ -29,3 +29,11 @@ dotenvy = "0.15"
 
 [[example]]
 name = "create_invoice"
+
+[profile]
+
+[profile.ci]
+inherits = "dev"
+incremental = false
+debug = "line-tables-only"
+lto = "off"
