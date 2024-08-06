@@ -49,7 +49,7 @@ impl Phoenixd {
     /// # Example
     /// ```
     /// use phoenixd_rs::Phoenixd;
-    /// let client = Phoenixd::new("xxxxxxxxxxx", "https://test.com", None).unwrap();
+    /// let client = Phoenixd::new("xxxxxxxxxxx", "https://test.com").unwrap();
     /// ```
     pub fn new(api_password: &str, api_url: &str) -> Result<Self> {
         let client = reqwest::Client::builder().build()?;
