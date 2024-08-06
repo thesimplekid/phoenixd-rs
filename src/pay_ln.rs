@@ -19,7 +19,7 @@ pub struct PayInvoiceRequest {
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PayInvoiceResponse {
-    /// Amount recipient was payed
+    /// Amount recipient was paid
     pub recipient_amount_sat: u64,
     /// Routing fee paid
     pub routing_fee_sat: u64,

@@ -33,7 +33,7 @@ pub struct WebhookResponse {
 }
 
 /*
-Fot Get Info
+For Get Info
 #[derive(Debug, Clone, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Channel {
     pub state: String,
