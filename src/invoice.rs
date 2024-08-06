@@ -33,6 +33,32 @@ pub struct InvoiceResponse {
     pub serialized: String,
 }
 
+/// Find Invoice Response
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FindInvoiceResponse {
+    /// Payment Hash
+    pub payment_hash: String,
+    /// Preimage
+    pub preimage: String,
+    /// External Id
+    pub external_id: String,
+    /// Description
+    pub description: String,
+    /// Bolt11 invoice
+    pub invoice: String,
+    /// Paid flag
+    pub is_paid: bool,
+    /// Sats received
+    pub received_sat: u64,
+    /// Fees
+    pub fees: u64,
+    /// Completed at
+    pub completed_at: Option<u64>,
+    /// Time created
+    pub created_at: u64,
+}
+
 impl Phoenixd {
     /// Create Invoice
     pub async fn create_invoice(&self, invoice_request: InvoiceRequest) -> Result<InvoiceResponse> {
@@ -53,7 +79,7 @@ impl Phoenixd {
     }
 
     /// Find Invoice
-    pub async fn find_invoice(&self, payment_hash: &str) -> Result<InvoiceResponse> {
+    pub async fn find_invoice(&self, payment_hash: &str) -> Result<FindInvoiceResponse> {
         let url = self.api_url.join("/incoming")?.join(payment_hash)?;
 
         let res = self.make_get(url).await?;

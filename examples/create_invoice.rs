@@ -10,7 +10,6 @@ async fn main() {
     let strike = Phoenixd::new(
         &env::var("API_KEY").expect("API key not set"),
         &env::var("API_URL").expect("Apit url needs to be set"),
-        None,
     )
     .unwrap();
 

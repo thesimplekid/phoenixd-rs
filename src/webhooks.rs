@@ -1,6 +1,5 @@
 //! Phoenixd Webhooks
 
-use anyhow::anyhow;
 use axum::extract::State;
 use axum::routing::post;
 use axum::{Json, Router};
@@ -56,18 +55,13 @@ impl Phoenixd {
     /// Create router for webhook
     pub async fn create_invoice_webhook_router(
         &self,
+        webhook_endpoint: &str,
         sender: tokio::sync::mpsc::Sender<WebhookResponse>,
     ) -> anyhow::Result<Router> {
         let state = WebhookState { sender };
 
         let router = Router::new()
-            .route(
-                self.webhook_url
-                    .as_ref()
-                    .ok_or(anyhow!("No webhook url set"))?
-                    .as_str(),
-                post(handle_invoice),
-            )
+            .route(webhook_endpoint, post(handle_invoice))
             .with_state(state);
 
         Ok(router)

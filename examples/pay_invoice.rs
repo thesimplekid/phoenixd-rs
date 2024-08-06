@@ -10,7 +10,6 @@ async fn main() {
     let phoenixd = Phoenixd::new(
         &env::var("API_KEY").expect("API key not set"),
         &env::var("API_URL").expect("Api url not set"),
-        None,
     )
     .unwrap();
 

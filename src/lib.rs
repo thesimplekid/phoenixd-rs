@@ -24,7 +24,6 @@ pub struct Phoenixd {
     api_password: String,
     api_url: Url,
     client: Client,
-    webhook_url: Option<Url>,
 }
 
 /// Invoice state
@@ -52,20 +51,14 @@ impl Phoenixd {
     /// use phoenixd_rs::Phoenixd;
     /// let client = Phoenixd::new("xxxxxxxxxxx", "https://test.com", None).unwrap();
     /// ```
-    pub fn new(api_password: &str, api_url: &str, webhook_url: Option<String>) -> Result<Self> {
+    pub fn new(api_password: &str, api_url: &str) -> Result<Self> {
         let client = reqwest::Client::builder().build()?;
         let api_url = Url::from_str(api_url)?;
-
-        let webhook_url = match webhook_url {
-            Some(url) => Some(Url::from_str(&url)?),
-            None => None,
-        };
 
         Ok(Self {
             api_password: api_password.to_string(),
             api_url,
             client,
-            webhook_url,
         })
     }
 
