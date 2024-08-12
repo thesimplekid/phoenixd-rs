@@ -66,8 +66,6 @@ impl Phoenixd {
         Ok(self
             .client
             .get(url)
-            .header("Content-Type", "application/json")
-            .header("accept", "application/json")
             .basic_auth("", Some(&self.api_password))
             .send()
             .await?
@@ -81,9 +79,7 @@ impl Phoenixd {
                 self.client
                     .post(url)
                     .basic_auth("", Some(&self.api_password))
-                    .header("Content-Type", "application/json")
-                    .header("accept", "application/json")
-                    .json(&data)
+                    .form(&data)
                     .send()
                     .await?
                     .json::<Value>()
@@ -93,7 +89,6 @@ impl Phoenixd {
                 self.client
                     .post(url)
                     .basic_auth("", Some(&self.api_password))
-                    .header("accept", "application/json")
                     .send()
                     .await?
                     .json::<Value>()
