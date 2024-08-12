@@ -10,14 +10,18 @@ use crate::Phoenixd;
 #[serde(rename_all = "camelCase")]
 pub struct InvoiceRequest {
     /// Correlation ID
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub external_id: Option<String>,
     /// Invoice description
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// description Hash
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description_hash: Option<String>,
     /// Invoice Amount in sats
     pub amount_sat: u64,
     /// webhook Url
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub webhook_url: Option<String>,
 }
 
