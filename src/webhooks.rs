@@ -24,7 +24,7 @@ pub struct WebhookResponse {
     #[serde(rename = "type")]
     pub _type: String,
     /// Amount received
-    pub amount_msat: u64,
+    pub amount_sat: u64,
     /// Payment Hash
     pub payment_hash: String,
     /// External id if one was provided when invoice created
