@@ -46,7 +46,7 @@ pub struct FindInvoiceResponse {
     /// Preimage
     pub preimage: String,
     /// External Id
-    pub external_id: String,
+    pub external_id: Option<String>,
     /// Description
     pub description: String,
     /// Bolt11 invoice
@@ -84,14 +84,17 @@ impl Phoenixd {
 
     /// Find Invoice
     pub async fn find_invoice(&self, payment_hash: &str) -> Result<FindInvoiceResponse> {
-        let url = self.api_url.join("/incoming")?.join(payment_hash)?;
+        let url = self
+            .api_url
+            .join(&format!("payments/incoimg/{}", payment_hash))?;
 
         let res = self.make_get(url).await?;
 
         match serde_json::from_value(res.clone()) {
             Ok(res) => Ok(res),
-            Err(_) => {
+            Err(err) => {
                 log::error!("Api error response on find invoice");
+                log::error!("{}", err);
                 log::error!("{}", res);
                 bail!("Could not find invoice")
             }
