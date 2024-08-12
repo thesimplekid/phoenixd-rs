@@ -86,7 +86,7 @@ impl Phoenixd {
     pub async fn find_invoice(&self, payment_hash: &str) -> Result<FindInvoiceResponse> {
         let url = self
             .api_url
-            .join(&format!("payments/incoimg/{}", payment_hash))?;
+            .join(&format!("payments/incoming/{}", payment_hash))?;
 
         let res = self.make_get(url).await?;
 
