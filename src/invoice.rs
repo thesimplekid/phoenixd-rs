@@ -40,7 +40,7 @@ pub struct InvoiceResponse {
 /// Find Invoice Response
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct FindInvoiceResponse {
+pub struct GetIncomingInvoiceResponse {
     /// Payment Hash
     pub payment_hash: String,
     /// Preimage
@@ -83,7 +83,10 @@ impl Phoenixd {
     }
 
     /// Find Invoice
-    pub async fn find_invoice(&self, payment_hash: &str) -> Result<FindInvoiceResponse> {
+    pub async fn get_incoming_invoice(
+        &self,
+        payment_hash: &str,
+    ) -> Result<GetIncomingInvoiceResponse> {
         let url = self
             .api_url
             .join(&format!("payments/incoming/{}", payment_hash))?;
