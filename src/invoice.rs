@@ -1,4 +1,4 @@
-//! Handle invoice creation
+//! Handle invoice
 
 use anyhow::{bail, Result};
 use serde::{Deserialize, Serialize};
@@ -37,7 +37,7 @@ pub struct InvoiceResponse {
     pub serialized: String,
 }
 
-/// Find Invoice Response
+/// Find Incoming Response
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GetIncomingInvoiceResponse {
@@ -63,6 +63,28 @@ pub struct GetIncomingInvoiceResponse {
     pub created_at: u64,
 }
 
+/// Find Outgoing Response
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetOutgoingInvoiceResponse {
+    /// Payment Hash
+    pub payment_hash: String,
+    /// Preimage
+    pub preimage: String,
+    /// Paid flag
+    pub is_paid: bool,
+    /// Amount sent
+    pub sent: u64,
+    /// Fees
+    pub fees: u64,
+    /// Invoice
+    pub invoice: String,
+    /// Completed at
+    pub completed_at: Option<u64>,
+    /// Time created
+    pub created_at: u64,
+}
+
 impl Phoenixd {
     /// Create Invoice
     pub async fn create_invoice(&self, invoice_request: InvoiceRequest) -> Result<InvoiceResponse> {
@@ -82,7 +104,7 @@ impl Phoenixd {
         }
     }
 
-    /// Find Invoice
+    /// Find incoming invoice
     pub async fn get_incoming_invoice(
         &self,
         payment_hash: &str,
@@ -99,7 +121,29 @@ impl Phoenixd {
                 log::error!("Api error response on find invoice");
                 log::error!("{}", err);
                 log::error!("{}", res);
-                bail!("Could not find invoice")
+                bail!("Could not find incoming invoice")
+            }
+        }
+    }
+
+    /// Find outgoing invoice
+    pub async fn get_outgoing_invoice(
+        &self,
+        payment_hash: &str,
+    ) -> Result<GetOutgoingInvoiceResponse> {
+        let url = self
+            .api_url
+            .join(&format!("payments/outgoing/{}", payment_hash))?;
+
+        let res = self.make_get(url).await?;
+
+        match serde_json::from_value(res.clone()) {
+            Ok(res) => Ok(res),
+            Err(err) => {
+                log::error!("Api error response on find invoice");
+                log::error!("{}", err);
+                log::error!("{}", res);
+                bail!("Could not find outgoing invoice")
             }
         }
     }
