@@ -7,7 +7,7 @@
 use std::str::FromStr;
 
 use anyhow::Result;
-use reqwest::{Client, Url};
+use reqwest::{Client, IntoUrl, Url};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -62,7 +62,10 @@ impl Phoenixd {
         })
     }
 
-    async fn make_get(&self, url: Url) -> Result<Value> {
+    async fn make_get<U>(&self, url: U) -> Result<Value>
+    where
+        U: IntoUrl,
+    {
         Ok(self
             .client
             .get(url)
@@ -73,7 +76,11 @@ impl Phoenixd {
             .await?)
     }
 
-    async fn make_post<T: Serialize>(&self, url: Url, data: Option<T>) -> Result<Value> {
+    async fn make_post<U, T>(&self, url: U, data: Option<T>) -> Result<Value>
+    where
+        U: IntoUrl,
+        T: Serialize,
+    {
         let value = match data {
             Some(data) => {
                 self.client
