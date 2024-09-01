@@ -9,7 +9,8 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
-build-msrv:
+jobs:
+  build-msrv:
     name:
     runs-on: ubuntu-latest
     strategy:
