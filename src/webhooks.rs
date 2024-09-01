@@ -3,7 +3,7 @@
 use axum::extract::State;
 use axum::routing::post;
 use axum::{Json, Router};
-use reqwest::StatusCode;
+use axum::http::StatusCode;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -21,8 +21,7 @@ pub struct WebhookState {
 #[serde(rename_all = "camelCase")]
 pub struct WebhookResponse {
     /// Webhook response type
-    #[serde(rename = "type")]
-    pub _type: String,
+    #[serde(rename = "type")] pub _type: String,
     /// Amount received
     pub amount_sat: u64,
     /// Payment Hash
