@@ -25,7 +25,7 @@ async fn main() {
     println!("{:?}", create_invoice);
 
     let invoice = strike
-        .find_invoice(&create_invoice.payment_hash.clone())
+        .get_incoming_invoice(&create_invoice.payment_hash.clone())
         .await
         .unwrap();
     println!("{:?}", invoice);
