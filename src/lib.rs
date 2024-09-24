@@ -15,7 +15,7 @@ pub mod invoice;
 pub mod pay_ln;
 pub mod webhooks;
 
-use error::Error;
+pub use error::Error;
 pub use invoice::*;
 pub use pay_ln::*;
 
