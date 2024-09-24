@@ -6,15 +6,16 @@
 
 use std::str::FromStr;
 
-use anyhow::Result;
 use reqwest::{Client, IntoUrl, Url};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+mod error;
 pub mod invoice;
 pub mod pay_ln;
 pub mod webhooks;
 
+use error::Error;
 pub use invoice::*;
 pub use pay_ln::*;
 
@@ -51,7 +52,7 @@ impl Phoenixd {
     /// use phoenixd_rs::Phoenixd;
     /// let client = Phoenixd::new("xxxxxxxxxxx", "https://test.com").unwrap();
     /// ```
-    pub fn new(api_password: &str, api_url: &str) -> Result<Self> {
+    pub fn new(api_password: &str, api_url: &str) -> anyhow::Result<Self> {
         let client = reqwest::Client::builder().build()?;
         let api_url = Url::from_str(api_url)?;
 
@@ -62,7 +63,7 @@ impl Phoenixd {
         })
     }
 
-    async fn make_get<U>(&self, url: U) -> Result<Value>
+    async fn make_get<U>(&self, url: U) -> Result<Value, Error>
     where
         U: IntoUrl,
     {
@@ -76,7 +77,7 @@ impl Phoenixd {
             .await?)
     }
 
-    async fn make_post<U, T>(&self, url: U, data: Option<T>) -> Result<Value>
+    async fn make_post<U, T>(&self, url: U, data: Option<T>) -> anyhow::Result<Value>
     where
         U: IntoUrl,
         T: Serialize,
