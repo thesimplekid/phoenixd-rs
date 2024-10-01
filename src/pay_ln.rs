@@ -16,6 +16,18 @@ pub struct PayInvoiceRequest {
     pub invoice: String,
 }
 
+///Pay bolt12 offer
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PayBolt12Request {
+    /// Amount in sats
+    pub amount_sats: Option<u64>,
+    /// Bolt12 offer
+    pub offer: String,
+    /// Message
+    pub message: String,
+}
+
 /// Pay Invoice Response
 #[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -66,6 +78,33 @@ impl Phoenixd {
         let request = PayInvoiceRequest {
             amount_sats,
             invoice: invoice.to_string(),
+        };
+
+        let res = self.make_post(url, Some(request)).await?;
+
+        match serde_json::from_value(res.clone()) {
+            Ok(res) => Ok(res),
+            Err(_) => {
+                log::error!("Api error response on payment quote execution");
+                log::error!("{}", res);
+                bail!("Could not execute payment quote")
+            }
+        }
+    }
+
+    /// Pay offer
+    pub async fn pay_bolt12_offer(
+        &self,
+        offer: String,
+        amount_sats: Option<u64>,
+        message: String,
+    ) -> anyhow::Result<PayInvoiceResponse> {
+        let url = self.api_url.join("/payoffer")?;
+
+        let request = PayBolt12Request {
+            amount_sats,
+            offer,
+            message,
         };
 
         let res = self.make_post(url, Some(request)).await?;
