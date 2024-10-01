@@ -25,7 +25,7 @@ pub struct PayBolt12Request {
     /// Bolt12 offer
     pub offer: String,
     /// Message
-    pub message: String,
+    pub message: Option<String>,
 }
 
 /// Pay Invoice Response
@@ -97,7 +97,7 @@ impl Phoenixd {
         &self,
         offer: String,
         amount_sats: Option<u64>,
-        message: String,
+        message: Option<String>,
     ) -> anyhow::Result<PayInvoiceResponse> {
         let url = self.api_url.join("/payoffer")?;
 
