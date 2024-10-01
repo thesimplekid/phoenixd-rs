@@ -61,7 +61,7 @@ pub struct GetOutgoingInvoiceResponse {
     /// Fees
     pub fees: u64,
     /// Invoice
-    pub invoice: String,
+    pub invoice: Option<String>,
     /// Completed at
     pub completed_at: Option<u64>,
     /// Time created
