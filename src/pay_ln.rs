@@ -11,7 +11,8 @@ use crate::{Error, Phoenixd};
 #[serde(rename_all = "camelCase")]
 pub struct PayInvoiceRequest {
     /// Amount in sats
-    pub amount_sats: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amount_sat: Option<u64>,
     /// Bolt11 Invoice
     pub invoice: String,
 }
@@ -21,10 +22,11 @@ pub struct PayInvoiceRequest {
 #[serde(rename_all = "camelCase")]
 pub struct PayBolt12Request {
     /// Amount in sats
-    pub amount_sats: Option<u64>,
+    pub amount_sat: u64,
     /// Bolt12 offer
     pub offer: String,
     /// Message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
 
@@ -71,12 +73,12 @@ impl Phoenixd {
     pub async fn pay_bolt11_invoice(
         &self,
         invoice: &str,
-        amount_sats: Option<u64>,
+        amount_sat: Option<u64>,
     ) -> anyhow::Result<PayInvoiceResponse> {
         let url = self.api_url.join("/payinvoice")?;
 
         let request = PayInvoiceRequest {
-            amount_sats,
+            amount_sat,
             invoice: invoice.to_string(),
         };
 
@@ -96,13 +98,13 @@ impl Phoenixd {
     pub async fn pay_bolt12_offer(
         &self,
         offer: String,
-        amount_sats: Option<u64>,
+        amount_sat: u64,
         message: Option<String>,
     ) -> anyhow::Result<PayInvoiceResponse> {
         let url = self.api_url.join("/payoffer")?;
 
         let request = PayBolt12Request {
-            amount_sats,
+            amount_sat,
             offer,
             message,
         };
